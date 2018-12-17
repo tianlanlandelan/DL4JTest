@@ -18,14 +18,19 @@ public class Nd4jTest {
      * 矩阵创建与控制
      */
     @Test
-    public void Nd4jTestCreate(){
+    public void testCreat(){
         //生成一个全0二维矩阵
         INDArray tensorA =  Nd4j.zeros(4,5);
         println("全0二维矩阵",tensorA);
 
         //生成一个全1二维矩阵
         INDArray tensorB =  Nd4j.ones(4,5);
-        println("全0二维矩阵",tensorB);
+        println("全1二维矩阵",tensorB);
+
+        //生成一个全1二维矩阵
+        INDArray tensorC =  Nd4j.rand(4,5);
+        println("随机二维矩阵",tensorC);
+
 
         println("水平拼接若干矩阵，矩阵必须有相同的行数", Nd4j.hstack(tensorA,tensorB));
         println("垂直拼接若干矩阵，矩阵必须有相同的列数", Nd4j.vstack(tensorA,tensorB));
