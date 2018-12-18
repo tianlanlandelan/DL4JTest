@@ -5,15 +5,18 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.factory.Nd4jBackend;
-
+/**
+ * ND4J是JVM的科学计算库，运行速度快，RAM要求低
+ * 多用途，多维数组对象
+ * 多平台功能，包括GPU
+ * 线性代数和信号处理功能
+ *
+ * @author yangkaile
+ * @date 2018-12-17 14:55:15
+ */
 public class Nd4jTest {
 
-    /**
-     * DN4J是JVM的科学计算库，运行速度快，RAM要求低
-     * 多用途，多维数组对象
-     * 多平台功能，包括GPU
-     * 线性代数和信号处理功能
-     */
+
     /**
      * 矩阵创建与控制
      */
