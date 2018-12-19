@@ -1,16 +1,19 @@
 package com.dl4j.demo;
 
-import net.bytebuddy.implementation.bind.annotation.RuntimeType;
+import org.datavec.api.records.reader.RecordReader;
+import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.split.CollectionInputSplit;
 import org.datavec.api.split.FileSplit;
 import org.datavec.api.split.NumberedFileInputSplit;
+import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.junit.Test;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.io.ClassPathResource;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 /**
  * DataVec：向量化及表达式模板库
@@ -31,21 +34,9 @@ import java.util.Random;
  */
 public class DataVecTest {
 
+    String rootPath = "files/";
 
-    /**
-     * 读取文件
-     * @return
-     */
-    private File getFile(){
-        try {
-            //加载resources下的files目录
-            ClassPathResource classPathResource1 = new ClassPathResource("files/");
-            File directoryToLook = classPathResource1.getFile();
-            return directoryToLook;
-        }catch (Exception e){
-            return null;
-        }
-    }
+
 
 
     /**
@@ -54,9 +45,8 @@ public class DataVecTest {
      */
     @Test
     public void loadDefault(){
-
         //递归加载文件夹下所有文件
-        FileSplit fileSplit = new FileSplit(getFile());
+        FileSplit fileSplit = new FileSplit(CommonUtils.getFile(rootPath));
 
         System.out.println("--------------- Example 1: Loading every file ---------------");
         URI[] fileSplitUris = fileSplit.locations();
@@ -71,7 +61,7 @@ public class DataVecTest {
     @Test
     public void loadNonRecursively(){
         //三个参数：根目录 过滤规则 是否递归
-        FileSplit fileSplit2 = new FileSplit(getFile(), null, false);
+        FileSplit fileSplit2 = new FileSplit(CommonUtils.getFile(rootPath), null, false);
 
         System.out.println("--------------- Example 2: Loading non-recursively ---------------");
         URI[] fileSplit2Uris = fileSplit2.locations();
@@ -86,7 +76,7 @@ public class DataVecTest {
     @Test
     public void loadWithFilter(){
         String[] extensionsToFilter = new String[]{".jpg"};
-        FileSplit fileSplit3 = new FileSplit(getFile(), extensionsToFilter, false);
+        FileSplit fileSplit3 = new FileSplit(CommonUtils.getFile(rootPath), extensionsToFilter, false);
 
         System.out.println("--------------- Example 3: Loading with filters ---------------");
         URI[] fileSplit3Uris = fileSplit3.locations();
@@ -102,7 +92,7 @@ public class DataVecTest {
      */
     @Test
     public void loadWithRandomSeed(){
-        FileSplit fileSplit4 = new FileSplit(getFile(), null, new Random(222));
+        FileSplit fileSplit4 = new FileSplit(CommonUtils.getFile(rootPath), null, new Random(222));
 
         System.out.println("--------------- Example 4: Loading with a random seed ---------------");
         Iterator<URI> fileSplit4UrisIterator = fileSplit4.locationsIterator();
@@ -136,7 +126,7 @@ public class DataVecTest {
         /*
           Creating a FileSplit this just to receive a list of URIs. From those URIs we'll create the CollectionInputSplit.
          */
-        FileSplit fileSplit = new FileSplit(getFile(), new String[]{"jpg"}, false);
+        FileSplit fileSplit = new FileSplit(CommonUtils.getFile(rootPath), new String[]{"jpg"}, false);
 
         /*
           Now you can create the CollectionInputSplit and print it as follows.
@@ -186,4 +176,20 @@ public class DataVecTest {
             System.out.println(uri);
         }
     }
+
+    @Test
+    public DataSetIterator loadIrisIter() throws IOException, InterruptedException {
+        File file = CommonUtils.getFile("BasicDataVecExample/exampledata.csv");
+        int batchSize = 10;
+        int labelColIndex = 10;
+        int numClasses = 10;
+        RecordReader recordReader = new CSVRecordReader();
+        recordReader.initialize(new FileSplit(file));
+        //batchSize 是每个批次的训练数据大小。labelColIndex 是“指定 CSV 文件中第几列是标注”。numClasses 是分类的类别数目。
+        DataSetIterator iterator = new RecordReaderDataSetIterator(recordReader, batchSize, labelColIndex, numClasses);
+
+        return iterator;
+    }
+
+
 }
