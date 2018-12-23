@@ -178,7 +178,7 @@ public class DataVecTest {
     }
 
     @Test
-    public DataSetIterator loadIrisIter() throws IOException, InterruptedException {
+    public void loadIrisIter() throws IOException, InterruptedException {
         File file = CommonUtils.getFile("BasicDataVecExample/exampledata.csv");
         int batchSize = 10;
         int labelColIndex = 10;
@@ -188,7 +188,6 @@ public class DataVecTest {
         //batchSize 是每个批次的训练数据大小。labelColIndex 是“指定 CSV 文件中第几列是标注”。numClasses 是分类的类别数目。
         DataSetIterator iterator = new RecordReaderDataSetIterator(recordReader, batchSize, labelColIndex, numClasses);
 
-        return iterator;
     }
 
 
