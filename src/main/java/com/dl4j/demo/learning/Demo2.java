@@ -4,6 +4,7 @@ import com.dl4j.demo.CommonUtils;
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.split.FileSplit;
+import org.deeplearning4j.api.storage.StatsStorage;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
@@ -15,6 +16,9 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.ui.api.UIServer;
+import org.deeplearning4j.ui.stats.StatsListener;
+import org.deeplearning4j.ui.storage.InMemoryStatsStorage;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
@@ -136,6 +140,12 @@ public class Demo2 {
             System.out.println(eval.stats());
             testIter.reset();
         }
+
+//        UIServer uiServer = UIServer.getInstance();
+//        StatsStorage statsStorage = new InMemoryStatsStorage();
+//        uiServer.attach(statsStorage);
+//        mlp.setListeners(new StatsListener(statsStorage));
+
         //保存模型
         ModelSerializer.writeModel(mlp, new File("mlp.mod"), true);
     }
